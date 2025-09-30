@@ -17,8 +17,12 @@ export interface RegisterCredentials {
 }
 
 export interface AuthResponse {
-  user: User
-  token: string
+  success: boolean
+  message: string
+  data: {
+    user: User
+    token: string
+  }
 }
 
 export interface AuthError {

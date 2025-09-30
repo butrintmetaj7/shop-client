@@ -1,14 +1,16 @@
 import axios, { type AxiosInstance, type AxiosError } from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api'
+
+axios.defaults.withCredentials = true
+axios.defaults.withXSRFToken = true
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json'
-  },
-  withCredentials: true
+  }
 })
    
 apiClient.interceptors.request.use(
