@@ -115,7 +115,6 @@ const handleLogin = async () => {
   align-items: center;
   min-height: 100vh;
   padding: 2rem;
-  background-color: #f5f5f5;
 }
 
 .login-card {

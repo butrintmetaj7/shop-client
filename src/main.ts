@@ -8,6 +8,7 @@ import router from './router'
 import { useAuthStore } from './stores/auth'
 
 import 'primeicons/primeicons.css'
+import './assets/main.css'
 
 const app = createApp(App)
 
