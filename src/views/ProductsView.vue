@@ -1,58 +1,38 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/auth'
-import { useRouter } from 'vue-router'
-import Button from 'primevue/button'
-import Card from 'primevue/card'
+import { computed, onMounted } from 'vue'
+import { useProductsStore } from '@/stores/products'
+import AppNav from '@/components/AppNav.vue'
+import ProductItem from '@/components/ProductItem.vue'
+import ProductItemSkeleton from '@/components/ProductItemSkeleton.vue'
 
-const authStore = useAuthStore()
-const router = useRouter()
+const SKELETON_COUNT = 6
 
-const handleLogout = async () => {
-  await authStore.logout()
-  router.push({ name: 'login' })
-}
+const productsStore = useProductsStore()
+
+const products = computed(() => productsStore.list.filter(p => p !== undefined))
+
+onMounted(async () => {
+  await productsStore.fetchAllProducts()
+})
 </script>
 
 <template>
-  <div class="products-container">
-    <Card class="products-card">
-      <template #title>Products</template>
-      <template #subtitle>Welcome, {{ authStore.user?.name }}!</template>
-      <template #content>
-        <div class="products-content">
-          <p>Products will be displayed here.</p>
-          
-          <Button
-            label="Logout"
-            icon="pi pi-sign-out"
-            severity="danger"
-            @click="handleLogout"
-          />
-        </div>
-      </template>
-    </Card>
+  <div class="min-h-screen bg-white">
+    <AppNav />
+    <div class="p-4 max-w-7xl mx-auto">
+      <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        <ProductItemSkeleton
+          v-for="n in SKELETON_COUNT"
+          v-show="productsStore.isLoading && !productsStore.loaded"
+          :key="n"
+        />
+        <ProductItem
+          v-for="product in products"
+          :key="product.id"
+          :product="product"
+        />
+      </div>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.products-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 2rem;
-}
-
-.products-card {
-  width: 100%;
-  max-width: 800px;
-}
-
-.products-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
-}
-</style>
 
