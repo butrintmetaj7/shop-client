@@ -18,7 +18,7 @@ const handleLogout = async () => {
 </script>
 
 <template>
-  <nav class="mb-2 shadow-lg bg-black text-white">
+  <nav class="sticky top-0 z-50 shadow-lg bg-black text-white">
     <div class="max-w-7xl mx-auto px-4 py-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
