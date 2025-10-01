@@ -67,17 +67,19 @@ const handleRegister = async () => {
 </script>
 
 <template>
-  <div class="register-container">
-    <Card class="register-card">
-      <template #title>Register</template>
+  <div class="min-h-screen flex items-center justify-center p-8">
+    <Card class="w-full max-w-md">
+      <template #title>
+        <h1 class="text-2xl font-bold">Register</h1>
+      </template>
       <template #content>
-        <form @submit.prevent="handleRegister" class="register-form">
+        <form @submit.prevent="handleRegister" class="flex flex-col gap-6">
           <Message v-if="errorMessage" severity="error" :closable="false">
             {{ errorMessage }}
           </Message>
 
-          <div class="form-field">
-            <label for="name">Name</label>
+          <div class="flex flex-col gap-2">
+            <label for="name" class="font-semibold">Name</label>
             <InputText
               id="name"
               v-model="name"
@@ -90,8 +92,8 @@ const handleRegister = async () => {
             <small v-if="fieldErrors.name" class="p-error">{{ fieldErrors.name }}</small>
           </div>
 
-          <div class="form-field">
-            <label for="email">Email</label>
+          <div class="flex flex-col gap-2">
+            <label for="email" class="font-semibold ">Email</label>
             <InputText
               id="email"
               v-model="email"
@@ -104,8 +106,8 @@ const handleRegister = async () => {
             <small v-if="fieldErrors.email" class="p-error">{{ fieldErrors.email }}</small>
           </div>
 
-          <div class="form-field">
-            <label for="password">Password</label>
+          <div class="flex flex-col gap-2">
+            <label for="password" class="font-semibold">Password</label>
             <Password
               id="password"
               v-model="password"
@@ -118,8 +120,8 @@ const handleRegister = async () => {
             <small v-if="fieldErrors.password" class="p-error">{{ fieldErrors.password }}</small>
           </div>
 
-          <div class="form-field">
-            <label for="password_confirmation">Confirm Password</label>
+          <div class="flex flex-col gap-2">
+            <label for="password_confirmation" class="font-semibold ">Confirm Password</label>
             <Password
               id="password_confirmation"
               v-model="passwordConfirmation"
@@ -141,59 +143,15 @@ const handleRegister = async () => {
             fluid
           />
 
-          <div class="login-link">
-            <span>Already have an account? </span>
-            <router-link :to="{ name: 'login' }">Login here</router-link>
+          <div class="text-center mt-2">
+            <span class="">Already have an account? </span>
+            <router-link :to="{ name: 'login' }" class="text-blue-600 font-semibold hover:underline">
+              Login here
+            </router-link>
           </div>
         </form>
       </template>
     </Card>
   </div>
 </template>
-
-<style scoped>
-.register-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 2rem;
-}
-
-.register-card {
-  width: 100%;
-  max-width: 450px;
-}
-
-.register-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-field label {
-  font-weight: 600;
-}
-
-.login-link {
-  text-align: center;
-  margin-top: 0.5rem;
-}
-
-.login-link a {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.login-link a:hover {
-  text-decoration: underline;
-}
-</style>
 

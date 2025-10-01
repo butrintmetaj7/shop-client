@@ -52,17 +52,19 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="login-container">
-    <Card class="login-card">
-      <template #title>Login</template>
+  <div class="min-h-screen flex items-center justify-center p-8">
+    <Card class="w-full max-w-md">
+      <template #title>
+        <h1 class="text-2xl font-bold">Login</h1>
+      </template>
       <template #content>
-        <form @submit.prevent="handleLogin" class="login-form">
+        <form @submit.prevent="handleLogin" class="flex flex-col gap-6">
           <Message v-if="errorMessage" severity="error" :closable="false">
             {{ errorMessage }}
           </Message>
 
-          <div class="form-field">
-            <label for="email">Email</label>
+          <div class="flex flex-col gap-2">
+            <label for="email" class="font-semibold">Email</label>
             <InputText
               id="email"
               v-model="email"
@@ -75,8 +77,8 @@ const handleLogin = async () => {
             <small v-if="fieldErrors.email" class="p-error">{{ fieldErrors.email }}</small>
           </div>
 
-          <div class="form-field">
-            <label for="password">Password</label>
+          <div class="flex flex-col gap-2">
+            <label for="password" class="font-semibold">Password</label>
             <Password
               id="password"
               v-model="password"
@@ -98,59 +100,15 @@ const handleLogin = async () => {
             fluid
           />
 
-          <div class="register-link">
-            <span>Don't have an account? </span>
-            <router-link :to="{ name: 'register' }">Register here</router-link>
+          <div class="text-center mt-2">
+            <span >Don't have an account? </span>
+            <router-link :to="{ name: 'register' }" class="text-blue-600 font-semibold hover:underline">
+              Register here
+            </router-link>
           </div>
         </form>
       </template>
     </Card>
   </div>
 </template>
-
-<style scoped>
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 2rem;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 450px;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-field label {
-  font-weight: 600;
-}
-
-.register-link {
-  text-align: center;
-  margin-top: 0.5rem;
-}
-
-.register-link a {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.register-link a:hover {
-  text-decoration: underline;
-}
-</style>
 
