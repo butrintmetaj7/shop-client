@@ -1,12 +1,19 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useProductsStore } from './products'
+import { useAuthStore } from './auth'
 import type { CartEntry, CartItemDisplay } from '@/types/cart'
 
-const CART_STORAGE_KEY = 'shopping_cart'
+const CART_STORAGE_PREFIX = 'shopping_cart'
 
 export const useCartStore = defineStore('cart', () => {
   const contents = ref<Record<string, CartEntry>>({})
+  const authStore = useAuthStore()
+
+  const getStorageKey = () => {
+    const userId = authStore.user?.id
+    return userId ? `${CART_STORAGE_PREFIX}_${userId}` : CART_STORAGE_PREFIX
+  }
 
   const count = computed(() => {
     return Object.keys(contents.value).reduce((acc, id) => {
@@ -79,20 +86,31 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function saveToStorage() {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(contents.value))
+    const storageKey = getStorageKey()
+    localStorage.setItem(storageKey, JSON.stringify(contents.value))
   }
 
   function loadFromStorage() {
     try {
-      const stored = localStorage.getItem(CART_STORAGE_KEY)
+      const storageKey = getStorageKey()
+      const stored = localStorage.getItem(storageKey)
       if (stored && stored !== 'undefined') {
         contents.value = JSON.parse(stored)
+      } else {
+        contents.value = {}
       }
     } catch (error) {
       console.error('Failed to load cart from storage:', error)
       contents.value = {}
     }
   }
+
+  watch(
+    () => authStore.user?.id,
+    () => {
+      loadFromStorage()
+    }
+  )
 
   loadFromStorage()
 
