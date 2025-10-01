@@ -58,6 +58,11 @@ export const useCartStore = defineStore('cart', () => {
   })
 
   function add(productId: number) {
+    if (!productId || productId < 1) {
+      console.warn(`Invalid product ID: ${productId}`)
+      return
+    }
+    
     if (contents.value[productId]) {
       contents.value[productId].quantity += 1
     } else {
@@ -70,6 +75,11 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function remove(productId: number) {
+    if (!productId || productId < 1) {
+      console.warn(`Invalid product ID: ${productId}`)
+      return
+    }
+    
     if (!contents.value[productId]) return
 
     contents.value[productId].quantity -= 1
