@@ -11,6 +11,7 @@ export const useProductsStore = defineStore('products', () => {
   
   const currentPage = ref(1)
   const lastPage = ref(1)
+  const perPage = ref(10)
   const total = ref(0)
 
   const list = computed(() => ids.value.map(id => items.value[id]))
@@ -24,15 +25,15 @@ export const useProductsStore = defineStore('products', () => {
 
       const response = await productService.getProducts(page)
       
+      ids.value = []
       response.data.forEach((product) => {
         items.value[product.id] = product
-        if (!ids.value.includes(product.id)) {
-          ids.value.push(product.id)
-        }
+        ids.value.push(product.id)
       })
 
       currentPage.value = response.current_page
       lastPage.value = response.last_page
+      perPage.value = response.per_page
       total.value = response.total
 
       return response
@@ -61,6 +62,7 @@ export const useProductsStore = defineStore('products', () => {
     error,
     currentPage,
     lastPage,
+    perPage,
     total,
     list,
     loaded,

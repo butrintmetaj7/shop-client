@@ -14,7 +14,7 @@ const formattedCart = computed(() => cartStore.formattedCart)
 
 onMounted(async () => {
   if (!productsStore.loaded) {
-    await productsStore.fetchAllProducts()
+    await productsStore.fetchProducts(1)
   }
 })
 </script>
