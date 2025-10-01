@@ -5,18 +5,12 @@ import CartItem from '@/components/CartItem.vue'
 import CartItemSkeleton from '@/components/CartItemSkeleton.vue'
 import { useCartStore } from '@/stores/cart'
 import { useProductsStore } from '@/stores/products'
+import { formatCurrency } from '@/utils/currency'
 
 const cartStore = useCartStore()
 const productsStore = useProductsStore()
 
 const formattedCart = computed(() => cartStore.formattedCart)
-
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD'
-  }).format(price)
-}
 
 onMounted(async () => {
   if (!productsStore.loaded) {
@@ -57,7 +51,7 @@ onMounted(async () => {
           <div class="text-right">
             <p class="text-gray-600 text-lg mb-2">Total</p>
             <p class="text-3xl md:text-4xl font-bold text-gray-900">
-              {{ formatPrice(cartStore.total) }}
+              {{ formatCurrency(cartStore.total) }}
             </p>
           </div>
         </div>

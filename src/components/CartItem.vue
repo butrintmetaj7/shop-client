@@ -2,19 +2,13 @@
 import { useCartStore } from '@/stores/cart'
 import type { CartItemDisplay } from '@/types/cart'
 import Button from 'primevue/button'
+import { formatCurrency } from '@/utils/currency'
 
 defineProps<{
   cartProduct: CartItemDisplay
 }>()
 
 const cartStore = useCartStore()
-
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD'
-  }).format(price)
-}
 </script>
 
 <template>
@@ -32,7 +26,7 @@ const formatPrice = (price: number) => {
           {{ cartProduct.title }}
         </h2>
         <p class="text-lg font-bold text-primary-500 mb-4">
-          {{ formatPrice(cartProduct.cost) }}
+          {{ formatCurrency(cartProduct.cost) }}
         </p>
       </div>
       <div class="flex items-center gap-2">
