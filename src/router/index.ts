@@ -5,6 +5,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/products'
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('@/views/LoginView.vue'),
@@ -20,6 +24,12 @@ const router = createRouter({
       path: '/products',
       name: 'products',
       component: () => import('@/views/ProductsView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: () => import('@/views/CartView.vue'),
       meta: { requiresAuth: true }
     }
   ]
@@ -41,8 +51,8 @@ router.beforeEach((to, from, next) => {
     console.log('Redirecting to login - auth required')
     next({ name: 'login' })
   } else if (to.meta.requiresGuest && isAuthenticated) {
-    console.log('Redirecting to home - already authenticated')
-    next({ name: 'home' })
+    console.log('Redirecting to products - already authenticated')
+    next({ name: 'products' })
   } else {
     console.log('Allowing navigation')
     next()
