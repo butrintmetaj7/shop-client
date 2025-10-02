@@ -18,7 +18,7 @@ const onPageChange = async (event: any) => {
 }
 
 onMounted(async () => {
-  await productsStore.fetchProducts(1)
+  await productsStore.fetchProducts()
 })
 </script>
 

@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!token.value && !!user.value)
 
-  function clearAuthState() {
+  const clearAuthState = () => {
     user.value = null
     token.value = null
     error.value = null
@@ -22,7 +22,7 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem(AUTH_USER_KEY)
   }
 
-  async function login(credentials: LoginCredentials) {
+  const login = async (credentials: LoginCredentials) => {
     try {
       isLoading.value = true
       error.value = null
@@ -45,7 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function register(credentials: RegisterCredentials) {
+  const register = async (credentials: RegisterCredentials) => {
     try {
       isLoading.value = true
       error.value = null
@@ -68,7 +68,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function logout() {
+  const logout = async () => {
     try {
       await authService.logout()
     } catch (err) {
@@ -78,7 +78,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  function initAuth() {
+  const initAuth = () => {
     try {
       const storedToken = localStorage.getItem(AUTH_TOKEN_KEY)
       const storedUser = localStorage.getItem(AUTH_USER_KEY)

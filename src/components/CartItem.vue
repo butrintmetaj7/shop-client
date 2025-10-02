@@ -49,4 +49,3 @@ const cartStore = useCartStore()
     </div>
   </div>
 </template>
-

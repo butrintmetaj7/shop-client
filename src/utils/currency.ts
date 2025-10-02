@@ -6,4 +6,3 @@ const formatter = new Intl.NumberFormat('en-US', {
 export const formatCurrency = (value: number): string => {
   return formatter.format(value)
 }
-
