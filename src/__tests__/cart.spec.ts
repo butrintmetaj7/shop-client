@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useCartStore } from '@/stores/cart'
 import { useProductsStore } from '@/stores/products'
-import { useAuthStore } from '@/stores/auth'
 
 describe('Cart Store', () => {
   beforeEach(() => {
@@ -184,39 +183,14 @@ describe('Cart Store', () => {
     })
   })
 
-  describe('User-specific storage', () => {
-    it('should use different storage keys for different users', () => {
-      const auth = useAuthStore()
-      
-      auth.user = { id: 1, name: 'User 1', email: 'user1@test.com' }
-      
-      const cart1 = useCartStore()
-      cart1.add(1)
-      
-      expect(localStorage.getItem('shopping_cart_1')).toBeTruthy()
-      expect(cart1.count).toBe(1)
-      
-      setActivePinia(createPinia())
-      const auth2 = useAuthStore()
-      auth2.user = { id: 2, name: 'User 2', email: 'user2@test.com' }
-      
-      const cart2 = useCartStore()
-      
-      expect(cart2.count).toBe(0)
-      
-      expect(localStorage.getItem('shopping_cart_1')).toBeTruthy()
-    })
-
+  describe('localStorage persistence', () => {
     it('should persist cart to localStorage', () => {
-      const auth = useAuthStore()
       const cart = useCartStore()
-      
-      auth.user = { id: 1, name: 'User 1', email: 'user1@test.com' }
       
       cart.add(1)
       cart.add(2)
       
-      const stored = localStorage.getItem('shopping_cart_1')
+      const stored = localStorage.getItem('shopping_cart')
       expect(stored).toBeTruthy()
       
       const parsed = JSON.parse(stored!)
@@ -225,22 +199,25 @@ describe('Cart Store', () => {
     })
 
     it('should load cart from localStorage on init', () => {
-      const auth = useAuthStore()
-      
-      auth.user = { id: 1, name: 'User 1', email: 'user1@test.com' }
-      
-      localStorage.setItem('shopping_cart_1', JSON.stringify({
+      localStorage.setItem('shopping_cart', JSON.stringify({
         '1': { productId: 1, quantity: 3 }
       }))
       
       setActivePinia(createPinia())
-      const auth2 = useAuthStore()
-      auth2.user = { id: 1, name: 'User 1', email: 'user1@test.com' }
-      
       const cart = useCartStore()
       
       expect(cart.count).toBe(3)
       expect(cart.contents['1']!.quantity).toBe(3)
+    })
+
+    it('should handle invalid localStorage data gracefully', () => {
+      localStorage.setItem('shopping_cart', 'invalid json')
+      
+      setActivePinia(createPinia())
+      const cart = useCartStore()
+      
+      expect(cart.count).toBe(0)
+      expect(cart.contents).toEqual({})
     })
   })
 })

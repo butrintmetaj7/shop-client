@@ -31,8 +31,5 @@ npm run build
 - Node.js 20+
 
 ## Features
-
-- User authentication (login/register)
 - Product listing
 - Shopping cart with persistence
-- Protected routes

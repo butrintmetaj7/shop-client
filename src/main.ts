@@ -5,7 +5,6 @@ import Aura from '@primevue/themes/aura'
 
 import App from './App.vue'
 import router from './router'
-import { useAuthStore } from './stores/auth'
 
 import 'primeicons/primeicons.css'
 import './assets/main.css'
@@ -19,8 +18,5 @@ app.use(PrimeVue, {
     preset: Aura
   }
 })
-
-const authStore = useAuthStore()
-authStore.initAuth()
 
 app.mount('#app')
