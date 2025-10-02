@@ -39,6 +39,12 @@ onMounted(async () => {
           :product="product"
         />
       </div>
+
+      <div v-if="!productsStore.isLoading && products.length === 0" class="text-center py-16">
+        <i class="pi pi-shopping-bag text-6xl text-gray-300 mb-4"></i>
+        <h2 class="text-2xl font-bold text-gray-700 mb-2">No Products Available</h2>
+        <p class="text-gray-500">Check back later for new products!</p>
+      </div>
       
       <div v-if="productsStore.total > 0" class="mt-8 flex justify-center">
         <Paginator
