@@ -7,6 +7,8 @@ import { useCartStore } from '@/stores/cart'
 import { useProductsStore } from '@/stores/products'
 import { formatCurrency } from '@/utils/currency'
 
+const DEFAULT_PAGE = 1
+
 const cartStore = useCartStore()
 const productsStore = useProductsStore()
 
@@ -14,7 +16,7 @@ const formattedCart = computed(() => cartStore.formattedCart)
 
 onMounted(async () => {
   if (!productsStore.loaded) {
-    await productsStore.fetchProducts(1)
+    await productsStore.fetchProducts(DEFAULT_PAGE)
   }
 })
 </script>

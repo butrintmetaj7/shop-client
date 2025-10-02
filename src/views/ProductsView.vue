@@ -7,13 +7,14 @@ import ProductItemSkeleton from '@/components/ProductItemSkeleton.vue'
 import Paginator from 'primevue/paginator'
 
 const SKELETON_COUNT = 6
+const PAGE_OFFSET = 1
 
 const productsStore = useProductsStore()
 
 const products = computed(() => productsStore.list.filter(p => p !== undefined))
 
 const onPageChange = async (event: any) => {
-  await productsStore.fetchProducts(event.page + 1)
+  await productsStore.fetchProducts(event.page + PAGE_OFFSET)
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 

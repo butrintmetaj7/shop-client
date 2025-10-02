@@ -4,6 +4,11 @@ import { useProductsStore } from './products'
 import type { CartEntry, CartItemDisplay } from '@/types/cart'
 
 const CART_STORAGE_KEY = 'shopping_cart'
+const MIN_VALID_PRODUCT_ID = 1
+const QUANTITY_INCREMENT = 1
+const QUANTITY_DECREMENT = 1
+const INITIAL_QUANTITY = 1
+const EMPTY_QUANTITY = 0
 
 export const useCartStore = defineStore('cart', () => {
   const contents = ref<Record<string, CartEntry>>({})
@@ -50,49 +55,49 @@ export const useCartStore = defineStore('cart', () => {
       .filter((item): item is CartItemDisplay => item !== null)
   })
 
-  function add(productId: number) {
-    if (!productId || productId < 1) {
+  const add = (productId: number) => {
+    if (!productId || productId < MIN_VALID_PRODUCT_ID) {
       console.warn(`Invalid product ID: ${productId}`)
       return
     }
     
     if (contents.value[productId]) {
-      contents.value[productId].quantity += 1
+      contents.value[productId].quantity += QUANTITY_INCREMENT
     } else {
       contents.value[productId] = {
         productId,
-        quantity: 1
+        quantity: INITIAL_QUANTITY
       }
     }
     saveToStorage()
   }
 
-  function remove(productId: number) {
-    if (!productId || productId < 1) {
+  const remove = (productId: number) => {
+    if (!productId || productId < MIN_VALID_PRODUCT_ID) {
       console.warn(`Invalid product ID: ${productId}`)
       return
     }
     
     if (!contents.value[productId]) return
 
-    contents.value[productId].quantity -= 1
+    contents.value[productId].quantity -= QUANTITY_DECREMENT
 
-    if (contents.value[productId].quantity === 0) {
+    if (contents.value[productId].quantity === EMPTY_QUANTITY) {
       delete contents.value[productId]
     }
     saveToStorage()
   }
 
-  function clearCart() {
+  const clearCart = () => {
     contents.value = {}
     saveToStorage()
   }
 
-  function saveToStorage() {
+  const saveToStorage = () => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(contents.value))
   }
 
-  function loadFromStorage() {
+  const loadFromStorage = () => {
     try {
       const stored = localStorage.getItem(CART_STORAGE_KEY)
       if (stored && stored !== 'undefined') {

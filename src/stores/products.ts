@@ -3,6 +3,8 @@ import { ref, computed } from 'vue'
 import { productService } from '@/services/productService'
 import type { Product } from '@/types/product'
 
+const DEFAULT_PAGE = 1
+
 export const useProductsStore = defineStore('products', () => {
   const items = ref<Record<number, Product>>({})
   const ids = ref<number[]>([])
@@ -18,7 +20,7 @@ export const useProductsStore = defineStore('products', () => {
   
   const loaded = computed(() => ids.value.length > 0)
 
-  async function fetchProducts(page: number = 1) {
+  const fetchProducts = async (page: number = DEFAULT_PAGE) => {
     try {
       isLoading.value = true
       error.value = null
@@ -45,13 +47,13 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
-  async function fetchAllProducts() {
+ const fetchAllProducts = async () => {
     if (loaded.value) return
 
-    await fetchProducts(1)
+    await fetchProducts(DEFAULT_PAGE)
   }
 
-  function getProductById(id: number): Product | undefined {
+  const getProductById = (id: number): Product | undefined => {
     return items.value[id]
   }
 
