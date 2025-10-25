@@ -8,6 +8,9 @@ describe('Cart Store', () => {
     setActivePinia(createPinia())
     localStorage.clear()
     vi.clearAllMocks()
+    // Suppress expected console warnings/errors during tests
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(console, 'error').mockImplementation(() => {})
   })
 
   describe('add()', () => {
