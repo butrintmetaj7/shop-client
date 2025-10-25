@@ -6,7 +6,6 @@ import { useProductsStore } from '@/stores/products'
 import { productService } from '@/services/productService'
 import type { Product } from '@/types/product'
 import { formatCurrency } from '@/utils/currency'
-import AppNav from '@/components/AppNav.vue'
 import Button from 'primevue/button'
 import Skeleton from 'primevue/skeleton'
 
@@ -58,9 +57,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <AppNav />
-    
+  <div class="bg-gray-50 min-h-[calc(100vh-64px)]">
     <div class="p-4 max-w-6xl mx-auto">
       <Button
         icon="pi pi-arrow-left"
