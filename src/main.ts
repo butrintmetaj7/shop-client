@@ -22,7 +22,7 @@ app.use(PrimeVue, {
 })
 
 // Initialize auth state from localStorage
-const authStore = useAuthStore()
+const authStore = useAuthStore(pinia)
 authStore.initializeAuth()
 
 app.mount('#app')

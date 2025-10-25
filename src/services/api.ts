@@ -29,17 +29,12 @@ apiClient.interceptors.request.use(
 
 // Response interceptor - handle 401 errors (unauthorized)
 apiClient.interceptors.response.use(
-  (response) => {
-    return response
-  },
+  (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear token from localStorage
+      // Clear token from storage and axios defaults
       localStorage.removeItem(TOKEN_STORAGE_KEY)
-      
-      // Clear auth store to keep state consistent
-      const authStore = useAuthStore()
-      authStore.clearAuth()
+      delete (apiClient.defaults.headers.common as Record<string, string>).Authorization
       
       // Redirect to products page if on a protected route
       const currentPath = router.currentRoute.value.path

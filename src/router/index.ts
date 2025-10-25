@@ -38,18 +38,18 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
-  if (requiresAuth && !authStore.isAuthenticated) {
-    // Save intended route for redirect after login (only if not already set)
+  // Consider token presence during initial load to avoid premature redirects
+  const hasToken = !!localStorage.getItem('auth_token')
+  const isAuthed = authStore.isAuthenticated || hasToken
+
+  if (requiresAuth && !isAuthed) {
     if (!localStorage.getItem('intended_route')) {
       localStorage.setItem('intended_route', to.fullPath)
     }
-    // Redirect to products page - user will need to use login modal
     if (to.path !== '/products') {
       return next('/products')
     }
-    return next()
   }
-
   return next()
 })
 
