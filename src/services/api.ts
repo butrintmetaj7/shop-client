@@ -16,15 +16,15 @@ const apiClient: AxiosInstance = axios.create({
 // Request interceptor - attach Bearer token to all requests
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem(TOKEN_STORAGE_KEY)
+    const authStore = useAuthStore()
+    const token = authStore.token || localStorage.getItem(TOKEN_STORAGE_KEY)
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers = config.headers ?? {}
+      ;(config.headers as Record<string, string>).Authorization = `Bearer ${token}`
     }
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  }
+  (error) => Promise.reject(error)
 )
 
 // Response interceptor - handle 401 errors (unauthorized)

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { authService } from '@/services/authService'
 import type { User, LoginCredentials, RegisterCredentials } from '@/types/auth'
+import apiClient from '@/services/api'
 
 const TOKEN_STORAGE_KEY = 'auth_token'
 
@@ -17,12 +18,14 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = userData
     token.value = authToken
     localStorage.setItem(TOKEN_STORAGE_KEY, authToken)
+    apiClient.defaults.headers.common.Authorization = `Bearer ${authToken}`
   }
 
   const clearAuth = () => {
     user.value = null
     token.value = null
     localStorage.removeItem(TOKEN_STORAGE_KEY)
+    delete apiClient.defaults.headers.common.Authorization
   }
 
   const login = async (credentials: LoginCredentials) => {
