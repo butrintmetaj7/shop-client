@@ -1,6 +1,9 @@
 import axios, { type AxiosInstance } from 'axios'
+import router from '@/router'
+import { useAuthStore } from '@/stores/auth'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1'
+const TOKEN_STORAGE_KEY = 'auth_token'
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -9,5 +12,39 @@ const apiClient: AxiosInstance = axios.create({
     Accept: 'application/json'
   }
 })
+
+// Request interceptor - attach Bearer token to all requests
+apiClient.interceptors.request.use(
+  (config) => {
+    const authStore = useAuthStore()
+    const token = authStore.token || localStorage.getItem(TOKEN_STORAGE_KEY)
+    if (token) {
+      config.headers = config.headers ?? {}
+      ;(config.headers as Record<string, string>).Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => Promise.reject(error)
+)
+
+// Response interceptor - handle 401 errors (unauthorized)
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Clear token from storage and axios defaults
+      localStorage.removeItem(TOKEN_STORAGE_KEY)
+      delete (apiClient.defaults.headers.common as Record<string, string>).Authorization
+      
+      // Redirect to products page if on a protected route
+      const currentPath = router.currentRoute.value.path
+      const protectedRoutes = ['/cart', '/profile']
+      if (protectedRoutes.includes(currentPath)) {
+        router.push('/products')
+      }
+    }
+    return Promise.reject(error)
+  }
+)
 
 export default apiClient

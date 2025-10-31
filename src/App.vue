@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import AppNav from '@/components/AppNav.vue'
 </script>
 
 <template>
-  <RouterView />
+  <div class="min-h-screen bg-white">
+    <AppNav />
+    <RouterView />
+  </div>
 </template>
 
 <style scoped></style>

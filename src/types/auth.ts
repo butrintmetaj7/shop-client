@@ -2,6 +2,10 @@ export interface User {
   id: number
   name: string
   email: string
+  role: 'customer' | 'admin'
+  email_verified_at: string | null
+  created_at: string
+  updated_at: string
 }
 
 export interface LoginCredentials {
@@ -14,6 +18,7 @@ export interface RegisterCredentials {
   email: string
   password: string
   password_confirmation: string
+  role?: 'customer' | 'admin'
 }
 
 export interface AuthResponse {
