@@ -50,11 +50,19 @@ const handleSubmit = async () => {
     email.value = ''
     password.value = ''
     
-    // Redirect to intended route if it exists
-    const intendedRoute = localStorage.getItem('intended_route')
-    if (intendedRoute) {
+    // Role-based redirect logic
+    if (authStore.user?.role === 'admin') {
+      // Admins always go to dashboard
       localStorage.removeItem('intended_route')
-      router.push(intendedRoute)
+      router.push('/admin/dashboard')
+    } else {
+      // Customer users check for intended route
+      const intendedRoute = localStorage.getItem('intended_route')
+      if (intendedRoute) {
+        localStorage.removeItem('intended_route')
+        router.push(intendedRoute)
+      }
+      // Otherwise stay on current page (no redirect needed)
     }
   } catch (error: any) {
     if (error.response?.status === 422) {

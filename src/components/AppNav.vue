@@ -33,7 +33,10 @@ const handleLogout = async () => {
 </script>
 
 <template>
-  <nav class="sticky top-0 z-40 shadow-lg bg-black text-white">
+  <!-- Admin users don't need the nav bar (using sidebar in dashboard) -->
+
+  <!-- Customer Navigation -->
+  <nav v-if="!authStore.isAdmin" class="sticky top-0 z-40 shadow-lg bg-black text-white">
     <div class="max-w-7xl mx-auto px-4 py-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">

@@ -29,6 +29,12 @@ const router = createRouter({
       name: 'profile',
       component: () => import('@/views/ProfileView.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/admin/dashboard',
+      name: 'admin-dashboard',
+      component: () => import('@/views/Admin/Dashboard.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true }
     }
   ]
 })
@@ -37,6 +43,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
 
   // Consider token presence during initial load to avoid premature redirects
   const hasToken = !!localStorage.getItem('auth_token')
@@ -50,6 +57,14 @@ router.beforeEach((to, from, next) => {
       return next('/products')
     }
   }
+
+  // Check admin requirement after auth check passes
+  if (requiresAdmin && isAuthed) {
+    if (!authStore.isAdmin) {
+      return next('/products')
+    }
+  }
+
   return next()
 })
 
